@@ -1,0 +1,26 @@
+# Maven Build Output
+target/
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Logging
+*.log
+springboot_output.log
+
+# IDE Specific
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+bin/
+
+# OS Specific
+.DS_Store
+Thumbs.db
+
+# Playwright / Verification
+/home/jules/verification/

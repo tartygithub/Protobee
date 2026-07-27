@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${appTitle} + ' - Account Registration'"></title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 flex items-center justify-center min-h-screen">
+
+<div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+    <div class="text-center mb-6">
+        <h1 class="text-2xl font-bold text-indigo-700">Account Creation</h1>
+        <p class="text-sm text-gray-500 mt-1">Join the enterprise document workspace</p>
+    </div>
+
+    <!-- Error/Success alerts -->
+    <div th:if="${error}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 text-sm" role="alert">
+        <span th:text="${error}"></span>
+    </div>
+
+    <form th:action="@{/register}" method="post" class="space-y-4">
+        <div>
+            <label class="block text-gray-700 text-sm font-semibold mb-1" for="username">Username</label>
+            <input type="text" id="username" name="username" required
+                   class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 text-gray-800" placeholder="Create username" />
+        </div>
+        <div>
+            <label class="block text-gray-700 text-sm font-semibold mb-1" for="password">Password</label>
+            <input type="password" id="password" name="password" required
+                   class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 text-gray-800" placeholder="Choose a password" />
+        </div>
+
+        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md transition duration-200">
+            Register Account
+        </button>
+    </form>
+
+    <div class="mt-6 text-center text-sm text-gray-500 border-t pt-4">
+        Already have an account? <a href="/login" class="text-indigo-600 hover:underline font-semibold">Log In</a>
+    </div>
+
+    <div class="mt-4 text-center text-xs text-gray-400">
+        Code: <span th:text="${appDocumentCode}"></span> | Version: <span th:text="${appVersion}"></span>
+    </div>
+</div>
+
+</body>
+</html>

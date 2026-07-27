@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: doc-processor-config
+  namespace: default
+data:
+  SPRING_DATASOURCE_URL: "jdbc:h2:mem:docdb;DB_CLOSE_DELAY=-1"
+  SPRING_DATASOURCE_USERNAME: "sa"
+  SPRING_DATASOURCE_PASSWORD: "password"
+  APP_INFO_TITLE: "Kubernetes Cloud Document Processor"
+  APP_INFO_DESCRIPTION: "Distributed Multi-Format Document Ingestion Engine"
+  APP_INFO_VERSION: "v3.4.1-Kubernetes"
+  APP_INFO_DOCUMENTCODE: "DP-K8S-CLOUD"
+  APP_AUTH_LDAPENABLED: "false"

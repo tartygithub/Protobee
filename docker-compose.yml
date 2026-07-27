@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  # Main Application
+  app:
+    image: corporate-doc-processor:1.0.0
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      # Easily switch or configure DB settings directly via environment variables
+      - SPRING_DATASOURCE_URL=jdbc:h2:mem:docdb;DB_CLOSE_DELAY=-1
+      - SPRING_DATASOURCE_USERNAME=sa
+      - SPRING_DATASOURCE_PASSWORD=password
+      - APP_INFO_TITLE=Enterprise Doc-Processor Container
+      - APP_INFO_DESCRIPTION=High availability multi-format document parser.
+      - APP_INFO_VERSION=v1.0.0-Docker
+      - APP_INFO_DOCUMENTCODE=DP-CONTAINER-2025
+      - APP_AUTH_LDAPENABLED=false
+    restart: always

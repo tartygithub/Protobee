@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: doc-processor-deployment
+  namespace: default
+  labels:
+    app: doc-processor
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: doc-processor
+  template:
+    metadata:
+      labels:
+        app: doc-processor
+    spec:
+      containers:
+        - name: doc-processor
+          image: corporate-doc-processor:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: doc-processor-config
+          resources:
+            limits:
+              cpu: "1000m"
+              memory: "1024Mi"
+            requests:
+              cpu: "500m"
+              memory: "512Mi"
+          readinessProbe:
+            httpGet:
+              path: /login
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /login
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 15
