@@ -5,7 +5,7 @@ import com.example.docprocessor.model.Document;
 import com.example.docprocessor.model.User;
 import com.example.docprocessor.service.DocumentService;
 import com.example.docprocessor.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;

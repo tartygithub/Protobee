@@ -131,16 +131,16 @@ public class DocumentService {
                     paragraphBuffer.append(text).append("\n");
                     // Split into sections per 5 paragraphs or headers
                     if (p.getStyleID() != null && p.getStyleID().startsWith("Heading")) {
-                        if (!paragraphBuffer.isEmpty()) {
+                        if (paragraphBuffer.length() > 0) {
                             doc.addSection(new DocumentSection("Section", "Heading-Split Section " + sectionCount++, paragraphBuffer.toString().trim()));
                             paragraphBuffer.setLength(0);
                         }
                     }
                 }
             }
-            if (!paragraphBuffer.isEmpty() || sectionCount == 1) {
+            if (paragraphBuffer.length() > 0 || sectionCount == 1) {
                 doc.addSection(new DocumentSection("Section", "Main Content Section " + sectionCount,
-                        paragraphBuffer.isEmpty() ? "No text elements found." : paragraphBuffer.toString().trim()));
+                        paragraphBuffer.length() == 0 ? "No text elements found." : paragraphBuffer.toString().trim()));
             }
         }
     }

@@ -2,9 +2,6 @@ package com.example.docprocessor.config;
 
 import com.example.docprocessor.service.CustomUserDetailsService;
 import com.example.docprocessor.service.UserService;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,22 +9,26 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.ldap.authentication.ad.ActiveDirectoryLdapAuthenticationProvider;
-import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final AuthConfigProperties authConfigProperties;
     private final CustomUserDetailsService userDetailsService;
@@ -46,27 +47,24 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable()) // disable for ease of dynamic updates & REST Swagger tests
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login", "/register", "/css/**", "/js/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+            .csrf().disable() // disable for ease of dynamic updates & REST Swagger tests
+            .authorizeRequests()
+                .antMatchers("/login", "/register", "/css/**", "/js/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .anyRequest().authenticated()
-            )
-            .formLogin(form -> form
+                .and()
+            .formLogin()
                 .loginPage("/login")
                 .successHandler(customSuccessHandler())
                 .failureHandler(customFailureHandler())
                 .permitAll()
-            )
-            .logout(logout -> logout
+                .and()
+            .logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout")
-                .permitAll()
-            );
-
-        return http.build();
+                .permitAll();
     }
 
     @Bean
@@ -93,7 +91,7 @@ public class SecurityConfig {
         // Map providers into AuthenticationManager
         return new ProviderManager(providers.stream()
                 .map(p -> (org.springframework.security.authentication.AuthenticationProvider) p)
-                .toList());
+                .collect(Collectors.toList()));
     }
 
     private AuthenticationSuccessHandler customSuccessHandler() {
